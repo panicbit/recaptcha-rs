@@ -5,7 +5,7 @@ Recaptcha-rs is a very simple library to verify recaptcha responses.
 To use recaptcha-rs in your project you can add the following to your `Cargo.toml`:
 ```toml
 [dependencies]
-recaptcha = "0.4.1"
+recaptcha = "0.5.0"
 ```
 
 ## Usage
