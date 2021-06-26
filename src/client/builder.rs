@@ -1,3 +1,5 @@
+use std::net::SocketAddr;
+
 use reqwest::Url;
 use lazy_static::lazy_static;
 use crate::Client;
@@ -27,9 +29,19 @@ impl Builder {
         self
     }
 
+    pub fn set_address(self, address: SocketAddr) -> Self {
+        self.set_host(&address.to_string()).expect("BUG: SocketAddr should always be a valid host")
+            .set_port(Some(address.port()))
+    }
+
     pub fn set_host(mut self, host: &str) -> Result<Self, SetHostError> {
         self.siteverify_url.set_host(Some(host))?;
         Ok(self)
+    }
+
+    pub fn set_port(mut self, port: Option<u16>) -> Self {
+        self.siteverify_url.set_port(port).expect("BUG: set_port on cannot-be-a-base url");
+        self
     }
 
     pub fn build(self, secret: String) -> Client {
