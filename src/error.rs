@@ -14,12 +14,21 @@ pub enum Error {
 }
 
 #[derive(PartialEq, Eq, Hash, Debug)]
+/// Error code that indicates the reason for a failed verification.
+///
+/// See also the [recaptcha error code reference](https://developers.google.com/recaptcha/docs/verify#error_code_reference).
 pub enum Code {
+    /// The secret parameter is missing.
     MissingSecret,
+    /// The secret parameter is invalid or malformed.
     InvalidSecret,
+    /// The response parameter is missing.
     MissingResponse,
+    /// The response parameter is invalid or malformed.
     InvalidResponse,
+    /// The request is invalid or malformed.
     BadRequest,
+    // The response is no longer valid: either is too old or has been used previously.
     TimeoutOrDuplicate,
     Unknown(String)
 }
