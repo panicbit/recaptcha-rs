@@ -21,3 +21,4 @@ url = "2.2.2"
 serde_json = "1.0.50"
 tokio = { version = "1.8.1", features = ["macros", "rt-multi-thread"] }
 structopt = "0.3.21"
+rocket = "0.5.0-rc.1"
