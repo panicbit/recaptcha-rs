@@ -19,25 +19,3 @@ pub async fn verify(secret: &str, response: &str, user_ip: Option<&IpAddr>) -> R
 
     client.verify(response, user_ip).await
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_invalid_secret_missing_response() {
-        use error::Error::*;
-        use error::Code::*;
-        let response = verify("", "", None).await;
-
-        match response {
-            Ok(()) => panic!("unexpected response: Ok(())"),
-            Err(Codes(ref errors)) => {
-                assert!(errors.contains(&InvalidSecret));
-            }
-            Err(e) => panic!("unexpected error: {}", e),
-        };
-
-        println!("{:?}", response);
-    }
-}
