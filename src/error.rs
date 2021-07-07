@@ -3,26 +3,14 @@ use std::io;
 use serde::{Deserializer, Deserialize};
 use reqwest;
 
-#[derive(Fail, Debug)]
+#[derive(thiserror::Error, Debug)]
 pub enum Error {
-    #[fail(display = "{:?}", _0)]
+    #[error("{0:?}")]
     Codes(HashSet<Code>),
-    #[fail(display = "{}", _0)]
-    Reqwest(#[cause] reqwest::Error),
-    #[fail(display = "{}", _0)]
-    Io(#[cause] io::Error),
-}
-
-impl From<reqwest::Error> for Error {
-    fn from(err: reqwest::Error) -> Error {
-        Error::Reqwest(err)
-    }
-}
-
-impl From<io::Error> for Error {
-    fn from(err: io::Error) -> Error {
-        Error::Io(err)
-    }
+    #[error("{0}")]
+    Reqwest(#[from] reqwest::Error),
+    #[error("{0}")]
+    Io(#[from] io::Error),
 }
 
 #[derive(PartialEq, Eq, Hash, Debug)]
