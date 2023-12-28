@@ -6,7 +6,7 @@ authors = ["panicbit <panicbit.dev@gmail.com>"]
 license = "MIT"
 keywords = ["recaptcha", "captcha"]
 repository = "https://github.com/panicbit/recaptcha-rs"
-edition = "2018"
+edition = "2021"
 
 [features]
 
@@ -14,11 +14,11 @@ default = ["reqwest/default-tls"]
 rustls-tls = ["reqwest/rustls-tls"]
 
 [dependencies]
-reqwest = { version = "0.10.4", features = ["json"], default-features = false }
+reqwest = { version = "0.11.23", features = ["json"], default-features = false }
 serde_derive = "1.0.106"
 serde = "1.0.106"
-failure = "0.1.7"
+thiserror = "1.0.52"
 
 [dev-dependencies]
 serde_json = "1.0.50"
-tokio = { version = "0.2.15", features = ["macros"] }
+tokio = { version = "1.35.1", features = ["macros"] }
