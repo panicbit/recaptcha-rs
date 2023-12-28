@@ -1,28 +1,17 @@
-use std::collections::HashSet;
-use std::io;
-use serde::{Deserializer, Deserialize};
 use reqwest;
+use serde::{Deserialize, Deserializer};
+use std::collections::HashSet;
+use std::{fmt, io};
+use thiserror::Error;
 
-#[derive(Fail, Debug)]
+#[derive(Error, Debug)]
 pub enum Error {
-    #[fail(display = "{:?}", _0)]
+    #[error("{0:?}")]
     Codes(HashSet<Code>),
-    #[fail(display = "{}", _0)]
-    Reqwest(#[cause] reqwest::Error),
-    #[fail(display = "{}", _0)]
-    Io(#[cause] io::Error),
-}
-
-impl From<reqwest::Error> for Error {
-    fn from(err: reqwest::Error) -> Error {
-        Error::Reqwest(err)
-    }
-}
-
-impl From<io::Error> for Error {
-    fn from(err: io::Error) -> Error {
-        Error::Io(err)
-    }
+    #[error("{0:?}")]
+    Reqwest(#[from] reqwest::Error),
+    #[error("{0:?}")]
+    Io(#[from] io::Error),
 }
 
 #[derive(PartialEq, Eq, Hash, Debug)]
@@ -33,13 +22,28 @@ pub enum Code {
     InvalidResponse,
     BadRequest,
     TimeoutOrDuplicate,
-    Unknown(String)
+    Unknown(String),
+}
+
+impl fmt::Display for Code {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Code::BadRequest => write!(f, "bad-request"),
+            Code::InvalidResponse => write!(f, "invalid-input-secret"),
+            Code::InvalidSecret => write!(f, "invalid-input-secret"),
+            Code::MissingResponse => write!(f, "missing-input-response"),
+            Code::MissingSecret => write!(f, "missing-input-secret"),
+            Code::TimeoutOrDuplicate => write!(f, "timeout-or-duplicate"),
+            Code::Unknown(s) => write!(f, "unknown code: {}", s),
+        }
+    }
 }
 
 impl<'de> Deserialize<'de> for Code {
     fn deserialize<D>(de: D) -> Result<Self, D::Error>
     where
-        D: Deserializer<'de>
+        D: Deserializer<'de>,
     {
         let code = String::deserialize(de)?;
         Ok(match &*code {
