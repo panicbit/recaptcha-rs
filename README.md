@@ -4,8 +4,8 @@ Recaptcha-rs is a very simple library to verify recaptcha responses.
 ## Installation
 To use recaptcha-rs in your project you can add the following to your `Cargo.toml`:
 ```toml
-[dependencies.recaptcha]
-version = "0.2.0"
+[dependencies]
+recaptcha = "0.5.0"
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ extern crate recaptcha;
 
 fn main() {
     let remote_ip = "123.123.123.123".parse().ok();
-    let res = recaptcha::verify("your_private_key", "user_response", remote_ip);
+    let res = recaptcha::verify("your_private_key", "user_response", remote_ip).await;
 
     if res.is_ok() {
         println!("Success");

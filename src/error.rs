@@ -32,6 +32,7 @@ pub enum Code {
     MissingResponse,
     InvalidResponse,
     BadRequest,
+    TimeoutOrDuplicate,
     Unknown(String)
 }
 
@@ -47,6 +48,7 @@ impl<'de> Deserialize<'de> for Code {
             "missing-input-response" => Code::MissingResponse,
             "invalid-input-response" => Code::InvalidResponse,
             "bad-request" => Code::BadRequest,
+            "timeout-or-duplicate" => Code::TimeoutOrDuplicate,
             _ => Code::Unknown(code),
         })
     }
